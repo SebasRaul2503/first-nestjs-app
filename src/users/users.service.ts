@@ -1,21 +1,31 @@
 import { Injectable } from '@nestjs/common';
-
+import { PrismaService } from '../prisma/prisma.service';
 @Injectable()
 export class UsersService {
-  findOne(id: string) {
-    return { id: id, name: 'John Doe' };
+  constructor(private prismaService: PrismaService) { }
+
+  findOne(id: number) {
+    return this.prismaService.user.findUnique({
+      where: { id }
+    })
   }
 
-  create(data: any) {
-    return { message: 'Usuario creado', data };
+  create(data: { name: string, email: string }) {
+    return this.prismaService.user.create({ data });
   }
 
-  update(id: string, data: any) {
-    return { message: `Usuario ${id} actualizado`, data };
+  update(id: number, data: { name: string }) {
+    return this.prismaService.user.update({
+      where: { id },
+      data: {
+        name: data.name
+      }
+    });
   }
 
-  remove(id: string) {
-    return { message: `Usuario ${id} eliminado` };
+  remove(id: number) {
+    return this.prismaService.user.delete({
+      where: { id }
+    })
   }
-
 }
