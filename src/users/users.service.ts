@@ -10,6 +10,10 @@ export class UsersService {
     })
   }
 
+  findAll() {
+    return this.prismaService.user.findMany();
+  }
+
   create(data: { name: string, email: string }) {
     return this.prismaService.user.create({ data });
   }
